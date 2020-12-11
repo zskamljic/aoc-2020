@@ -75,15 +75,6 @@ public class Day11 {
         return newGrid;
     }
 
-    private static void print(char[][] grid) {
-        for (char[] chars : grid) {
-            for (char aChar : chars) {
-                System.out.print(aChar);
-            }
-            System.out.println();
-        }
-    }
-
     private static int countOccupiedPart01(char[][] grid, int y, int x) {
         var occupied = 0;
         for (int i = Math.max(0, y - 1); i <= Math.min(y + 1, grid.length - 1); i++) {
