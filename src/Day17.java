@@ -25,7 +25,7 @@ public class Day17 {
     }
 
     private static <T extends NeighbourProvider<T>> void solve(List<String> input, BiFunction<Integer, Integer, T> identityCreator) {
-        List<NeighbourProvider<T>> pocketDimension = new ArrayList<>();
+        List<T> pocketDimension = new ArrayList<>();
         for (int y = 0; y < input.size(); y++) {
             var line = input.get(y);
             for (int x = 0; x < line.length(); x++) {
@@ -40,8 +40,8 @@ public class Day17 {
         System.out.println(pocketDimension.size());
     }
 
-    private static <T extends NeighbourProvider<T>> List<NeighbourProvider<T>> cycle(List<NeighbourProvider<T>> living) {
-        var newLiving = new CopyOnWriteArrayList<NeighbourProvider<T>>();
+    private static <T extends NeighbourProvider<T>> List<T> cycle(List<T> living) {
+        var newLiving = new CopyOnWriteArrayList<T>();
 
         var fields = living.parallelStream()
             .map(NeighbourProvider::neighbours)
