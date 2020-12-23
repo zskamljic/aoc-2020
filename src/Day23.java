@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,14 +23,17 @@ public class Day23 {
             .orElseThrow();
 
         part01(min, max, circle);
+        var before = System.currentTimeMillis();
         part02(min, max, circle);
+        var after = System.currentTimeMillis();
+        System.out.println(after-before);
     }
 
     private static void part01(int min, int max, List<Integer> circle) {
         var lookup = solveCommon(min, max, 100, circle);
 
         var builder = new StringBuilder();
-        var one = lookup.get(1);
+        var one = lookup[1];
         var current = one.next;
         while (current != one) {
             builder.append(current.value);
@@ -46,7 +48,7 @@ public class Day23 {
         }
 
         var lookup = solveCommon(min, 1_000_000, 10_000_000, circle);
-        var one = lookup.get(1);
+        var one = lookup[1];
         var next = one.next;
         var nextNext = next.next;
 
@@ -54,7 +56,7 @@ public class Day23 {
         System.out.println(next.value * (long) nextNext.value);
     }
 
-    private static HashMap<Integer, Node> solveCommon(int min, int max, int iterations, List<Integer> circle) {
+    private static Node[] solveCommon(int min, int max, int iterations, List<Integer> circle) {
         var nodes = circle.stream()
             .mapToInt(i -> i)
             .mapToObj(i -> {
@@ -65,14 +67,14 @@ public class Day23 {
             .collect(Collectors.toList());
 
         var head = nodes.remove(0);
-        var lookup = new HashMap<Integer, Node>();
-        lookup.put(head.value, head);
+        var lookup = new Node[max + 1];
+        lookup[head.value] = head;
 
         var previous = head;
         for (var node : nodes) {
             previous.next = node;
             previous = node;
-            lookup.put(node.value, node);
+            lookup[node.value] = node;
         }
         previous.next = head;
 
@@ -92,7 +94,7 @@ public class Day23 {
                     destinationValue = max;
                 }
             }
-            var target = lookup.get(destinationValue);
+            var target = lookup[destinationValue];
             threeClip.next.next.next = target.next;
             target.next = threeClip;
             current = current.next;
