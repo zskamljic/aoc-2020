@@ -41,12 +41,12 @@ public class Day24 {
     }
 
     private static Set<HexCoordinate> gameOfLifeStep(Set<HexCoordinate> colored) {
-        return colored.stream()
+        return colored.parallelStream()
             .map(HexCoordinate::neighboursAndSelf)
             .flatMap(Collection::stream)
             .distinct()
             .map(coordinate -> {
-                var neighbourCount = coordinate.neighbours().stream().filter(colored::contains).count();
+                var neighbourCount = coordinate.neighbours().parallelStream().filter(colored::contains).count();
                 if (colored.contains(coordinate)) {
                     if (neighbourCount == 0 || neighbourCount > 2) {
                         return null;
